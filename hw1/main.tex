@@ -1,0 +1,307 @@
+%\title{Hebrew document in WriteLatex - מסמך בעברית}
+\documentclass{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[english,hebrew]{babel}
+\selectlanguage{hebrew}
+\usepackage[top=2cm,bottom=2cm,left=2.5cm,right=2cm]{geometry}
+
+
+\usepackage{amsfonts,amsmath}
+
+\begin{document}
+\selectlanguage{hebrew}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% תרגיל 4 %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{תרגיל 4}
+נוכיח כי הקבוצות 
+$B_1$ 
+ו -
+$B_2$
+, קבוצות קמורות כאשר נתון ש - 
+$C \subseteq \mathbb{R}^m $
+תחום קמור, ו - 
+$A \in \mathbb{R}^{m \times n} $.
+
+%% Set B1
+\paragraph*{הקבוצה \L{B_1}}
+
+\begin{equation}
+\selectlanguage{english}
+B_1 = \{x\in \mathbb{R}^{n}{  } \,|\, x = A^Tz \,,\, z\in C \} \nonumber
+\end{equation}
+
+\begin{flushleft}
+\selectlanguage{hebrew}
+נבדוק אם נקודה שהיא צירוף של שתי נקודות השייכות לקבוצה
+$B_1$ 
+גם כן שייכת לקבוצה : 
+\end{flushleft}
+
+\selectlanguage{english}
+\begin{equation}
+\begin{align}
+\hfilneg &x = A^Tz \,,\, x\in\mathbb{R}^{n} \nonumber \hspace{10000pt minus 1fill} \\
+&y = A^Tz  \,,\, y\in\mathbb{R}^{n} \nonumber
+\end{align}
+\end{equation}
+
+\selectlanguage{hebrew}
+\begin{flushleft}
+ננדיר נקודה $k$
+המקיימת  : 
+\end{flushleft}
+
+\begin{equation}
+k = \lambda x + (1-\lambda) y \, , \, \lambda \in [0,1] \nonumber
+\end{equation}
+
+\begin{equation}
+\selectlanguage{english}
+k = \lambda x + (1-\lambda) y =\lambda  A^Tz + (1-\lambda) A^Tz = (\lambda+ 1-\lambda)A^Tz = A^Tz \in B_1 \nonumber \hspace{10000pt minus 1fill}
+\end{equation}
+\selectlanguage{hebrew}
+\begin{flushleft}
+$B_1$ 
+קמורה על פי הגדרה.
+\end{flushleft}
+
+%% Set B2
+\paragraph*{הקבוצה \L{B_2}}
+
+\begin{equation}
+\selectlanguage{english}
+B_2 = \{x\in \mathbb{R}^{n}{  } \,|\, Ax  \, \in C \} \nonumber
+\end{equation}
+
+\begin{flushleft}
+\selectlanguage{hebrew}
+נבדוק אם נקודה שהיא צירוף של שתי נקודות השייכות לקבוצה 
+$B_2$
+גם כן שייכת לקבוצה : 
+\end{flushleft}
+
+\begin{equation}
+\selectlanguage{english}
+\begin{align}
+\hfilneg &x : Ax \,,\, \in  C \nonumber \hspace{10000pt minus 1fill} \\
+         &y : Ay  \,,\, \in C \nonumber
+\end{align}
+\end{equation}
+\selectlanguage{hebrew}
+\begin{flushleft}
+ננדיר נקודה $k$
+המקיימת  : 
+\end{flushleft}
+
+\begin{equation}
+k = \lambda x + (1-\lambda) y \, , \, \lambda \in [0,1] \nonumber
+\end{equation}
+
+\begin{equation}
+\selectlanguage{english}
+k = \lambda x + (1-\lambda) y =\lambda  Ax + (1-\lambda) Ay \in B_2 \nonumber \hspace{10000pt minus 1fill}
+\end{equation}
+\selectlanguage{hebrew}
+\begin{flushleft}
+סכום של קבוצות קמורות היא קבוצה קמורה ולכן 
+$B_2$ 
+קמורה על פי הגדרה.
+\end{flushleft}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% תרגיל 5 %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{תרגיל 5}
+%% סעיף 1 %%
+\paragraph*{1. הוכחה }
+כי עבור קבוצה $S \in\mathbb{R}^n $
+ונקודת צבר $x \in\mathbb{R}^$
+, לכל $\epsilon > 0 $ 
+הכדור הפתוח $B(x,\epsilon)$
+מכיל אינסוף נקודות בקבוצה $S$.
+
+\subparagraph*{נוכיח בשלילה}
+\subparagraph*{$(1)$}
+נניח כי עבור נקודת צבר $x$ , 
+קיימות כמות סופית של נקודות ב - $S$.
+\subparagraph*{$(2)$}
+עבור נקודת צבר ספציפית $x_a$ .   
+הנקודה בעלת סביבה בגודל מינימלי $\epsilon_a$ .      
+\subparagraph*{$(3)$}
+על פי הגדרה של נקודת צבר, עבור כל $\epsilon_a > 0$  , 
+נדרשת שתהיה נקודה בסביבה של $x_a$ , 
+הנמצאת ב - $S$.
+\subparagraph*{$(4)$}
+נבחן את הסביבה של נקודה $x_a$ , 
+ברדיוס $\epsilon_a/2$ .
+\\
+בסביבת הנקודה $x_a$  , 
+אין נקודה השייכת ל - $S$. 
+)כי אמרנו שהמרחק המינימלי הוא $\epsilon_a$(
+\subparagraph*{$(5)$}
+כלומר מתקיימת סתירה על פי ההגדרה שעל 
+\textbf{כל} $\epsilon>0$
+חייבת להיות נקודה השייכת ל - $S$.
+\subparagraph*{$(6)$}
+על פי הסתירה חייבות להיות נקודות נוספות בסביבה של $x$,
+כלומר קיימות אינסוף נקודות .
+
+
+%% סעיף 2 %%
+\paragraph*{2. הוכחה }
+שהקבוצה $S$ 
+היא קבוצה סגורה אם ורק אם היא מכילה את כל נקודות הצבר שלה.\\
+נוכיח את הטענה בשני הכיוונים מכיוון שמדובר בטענת 
+\textbf{"אם ורק אם"}
+\subparagraph*{
+קבוצה $S$ 
+היא קבוצה המכילה את כל נקודות הצבר שלה
+}
+\subparagraph*{$(1)$}
+תהי נקודה $x$, 
+נקודה במשלים של $(S^c)\,S$ . 
+$x$ 
+אינה נקודה צבר של $S$, 
+)כי התחלנו ש - $S$ 
+מכילה את כל נקודות הצבר שלה(.
+
+\subparagraph*{$(2)$}
+עבור הקבוצה $S^c$ , 
+הנקודה $x$ 
+היא נקודת פנים מכיוון שכל הסביבה שלה מוכלת ב - $S^c$.
+\subparagraph*{$(3)$}
+כלומר, הקבוצה $S^c$,
+היא קבוצה פתוחה מכיוון שהיא מכילה את כל נקודות הפנים שלה.
+\subparagraph*{$(4)$}
+לכן על פי הגדרה, אם $S^c$, 
+היא קבוצה פתוחה אז הקבוצה $S$ היא קבוצה סגורה.
+
+\subparagraph*{
+ $S$ 
+קבוצה סגורה
+}
+\subparagraph*{$(1)$}
+מכיוון ש - $S$, 
+היא קבוצה סגורה, אז הקבוצה $S^c$
+היא קבוצה פתוחה )כלומר קבוצה המכילה את כל נקודות הפנים שלה(.
+\subparagraph*{$(2)$}
+נניח שקיימת נקודה $x$, 
+שהיא נקודת צבר של $S$.
+אז קיימת איזושהי נקודה ב- $S$, 
+בסביבה של $x$.
+\subparagraph*{$(3)$}
+מכיוון שהנקודה $x$
+לא שייכת ל - $S$ 
+אז היא שייכת ל - $S^c$.
+\subparagraph*{$(4)$}
+$S^c$ 
+היא קבוצה פתוחה, ולכן מכילה את כל נקודות הפנים שלה. כלומר כל נקודה ב - $S^c$
+היא נקודת פנים.
+\subparagraph*{$(5)$}
+נוצרה
+\textbf{סתירה} 
+כי הנחנו ש - $x$ 
+היא נקודת צבר של $S$ 
+לכן חייב להיות חיתוך בין הסביבה של $x$ 
+ל - $S$
+
+\subparagraph*{
+הוכחנו בשני הכיוונים ולכן הוכחנו את הטענה}
+
+
+%% סעיף 3 %%
+\paragraph*{3. הוכחה }
+כי אם הסדרה $S$ 
+סגורה, והסדרה $x_i \in S$
+מתכנסת ל - $x$ : 
+$\lim_{i\to\infty} \|x_i-x\| = 0 $ , 
+אז $x\in S$
+
+\subparagraph*{}
+נוכיח בשלילה כי 
+$x\not\in S$.
+\subparagraph*{$(1)$}
+מכיוון ש - $S$
+היא קבוצה סגורה , אז היא מכילה את כל נקודות הצבר שלה. ולכן בהנחת $x\not\in S$ 
+נובע ש - $x$
+אינה נקודת צבר של $S$
+\subparagraph*{$(2)$}
+אם $x$ 
+לא נקודת צבר של $S$
+אז עבור $\epsilon>0$
+הכדור הפתוח $B(x,\epsilon)\not\in S$
+\subparagraph*{$(3)$}
+על פי הנתון, 
+$\lim_{i\to\infty} \|x_i-x\| = 0 $ , 
+כלומר $x$
+צריכה להיות בסביבה של הסדרה $x_i$.
+\subparagraph*{$(4)$}
+קיבלנו סתירה בין סעיף
+$(2)$
+ל - 
+$(3)$
+ולכן $x\in S$
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% תרגיל 6 %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{תרגיל 6}
+נניח כי קיימים פתרונות נוספים $y_0,z_0$
+אשר פותרים את בעיית האופטמיזציה : 
+\begin{align}
+\selectlanguage{english}
+    \|y_0-x_0\|^2 = \|z_0-x_0\|^2 = (min_{y\in C} \| y-y_0\|)^2 = \delta^2
+\end{align}
+מכיוון ש -$y$
+הוא פתרון לבעיית האופטימיזציה, וגם $y\in C$
+אז גם נקודה $k_0$
+שייכת ל - $C$: 
+
+\begin{equation}
+\selectlanguage{english}
+    k_0 = \lambda z_0 + (1-\lambda)y_0 \in C \nonumber
+\end{equation}
+עבור $\lambda = 1/2 $
+מתקבל כי הנקודה $k_0$: 
+
+\begin{equation}
+\selectlanguage{english}
+    k_0 = \lambda z_0 + (1-\lambda)y_0 = \frac{z_0+y_0}{2}\in C \nonumber
+\end{equation}
+הנקודה $k_0$
+היא לא פיתרון של בעיית האופטימיזציה ולכן : 
+\begin{align}
+&\|k_0-x_0\|^2 \geq \delta^2 \nonumber \\ 
+&\|\frac{z_0+y_0}{2}-x_0\|^2 \geq \delta^2  \nonumber \\
+&\frac{1}{4}\|z_0+y_0-2x_0\|^2 \geq \delta^2  \nonumber \\
+&\frac{1}{4}\|(z_0 - x_0 ) + (y_0 - x_0)\|^2 \geq \delta^2  \nonumber \\
+&\frac{1}{4}\left[\|(z_0 - x_0 )\|^2 + 2 \langle z_0 - x_0 , y_0 - x_0 \rangle  + \|(y_0 - x_0)\|^2 \right] \geq \delta^2
+\end{align}
+נציב במשוואה )2( את משוואה )1( :
+\begin{align}
+&\frac{1}{4}\left[\delta^2 + 2 \langle z_0 - x_0 , y_0 - x_0 \rangle  + \delta^2 \right] \geq \delta^2 \nonumber \\
+&\frac{1}{2}\langle z_0 - x_0 , y_0 - x_0 \rangle \geq \frac{1}{2}\delta^2 \nonumber \\
+&\langle z_0 - x_0 , y_0 - x_0 \rangle \geq \delta^2 \nonumber \\
+&2\langle z_0 - x_0 , y_0 - x_0 \rangle \geq \|(z_0 - x_0 )\|^2 + \|(y_0 - x_0 )\|^2 \nonumber \\
+&\|(z_0 - x_0 )\|^2 + \|(y_0 - x_0 )\|^2 - 2\langle z_0 - x_0 , y_0 - x_0 \rangle \leq 0 \nonumber \\
+&\|(z_0 - x_0 ) - (y_0 - x_0 )\|^2 \leq 0 \nonumber \\
+&\|z_0  - y_0\|^2 \leq 0 \nonumber
+\end{align}
+על פי הגדרת ה $\|\cdot \|$,
+ $\|\cdot \| \geq 0 $
+ ולכן הפתרון היחיד האפשרי לתוצאה שקיבלנו הוא ש : 
+\begin{align}
+&\|z_0  - y_0\|^2 = 0 \nonumber \\
+&z_0  - y_0 = 0 \nonumber \\
+&z_0 = y_0  \nonumber
+\end{align}
+
+כלומר הפתרונות שהנחנו שפותרים את בעיית האופטימיזציה זהים, ולכן קיים רק פתרון יחיד שפותר את בעיית האופטימיזציה 
+\end{document}
