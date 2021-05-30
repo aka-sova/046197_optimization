@@ -1,6 +1,7 @@
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 
 def analytical_estimation(X, y):
@@ -15,18 +16,34 @@ def analytical_estimation(X, y):
     return a_est
 
 
-def projected_gd(X, y, step_size_mode : str, r, eps, max_iter, m, a_compare, eta = None):
+def projected_gd(X, y, step_size_mode : str, r, eps, max_iter, m, a_init, a_compare, eta = None, batch_size = None, print_every=100):
     """Estimate parameters using projected GD algorithm"""
 
     # step_size_mode :  decaying/AdaGrad
 
 
-    def calc_grad(X, y, a, m):
-        X_a = np.matmul(X, a) # (m,)
-        X_T = np.transpose(X) # (n x m)
-        # y (m, 1)
+    def calc_grad(X, y, a, m, batch_size = None):
 
-        g_T = (1/m) * np.matmul(X_T, X_a-y[:,0])
+        if batch_size == None:
+            X_a = np.matmul(X, a) # (m,)
+            X_T = np.transpose(X) # (n x m)
+            # y (m, 1)
+
+            g_T = (1/m) * np.matmul(X_T, X_a-y[:,0])
+
+        else:
+            # choose random 'batch_size' number of examples
+            # and calc gradient on them
+            m, n = X.shape
+            batch_indexes = np.random.randint(0, m, batch_size)
+            X_batch = X[batch_indexes, :]
+            y_batch = y[batch_indexes, :]
+
+            X_a = np.matmul(X_batch, a)             # (batch_size,)
+            X_batch_T = np.transpose(X_batch)       # (n x batch_size)
+            # y (batch_size, 1)
+
+            g_T = (1/m) * np.matmul(X_batch_T, X_a-y_batch[:,0])
 
         return g_T
 
@@ -65,25 +82,29 @@ def projected_gd(X, y, step_size_mode : str, r, eps, max_iter, m, a_compare, eta
 
     a_compare = np.transpose(a_compare)
 
-    # 1. pick random initial values s.t. they are in C:
-    in_C = False
-
-    while in_C == False:
-        a_est = np.random.randn(4)
-        in_C = np.linalg.norm(a_est) <= r
-
+    # take the initial values as current estimation
+    a_est = a_init
 
     # 2. keep going until stop condition reached or max_iter
     t = 1
     err_vec = np.array([])
+    time_vec = np.array([])
 
-    cur_grad = calc_grad(X, y, a_est, m)
+    cur_grad = calc_grad(X, y, a_est, m, batch_size)
     cur_grad_expand = np.transpose(np.expand_dims(cur_grad, axis=1))
     grad_vec = cur_grad_expand
 
-    while np.linalg.norm(cur_grad)**2 > eps and t < max_iter:
+    start_time = time.time()
 
+    while True:
 
+        if (np.linalg.norm(cur_grad) ** 2 < eps):
+            print(f"\nCurrent gradient {np.linalg.norm(cur_grad) ** 2} < {eps}. Stopping\n")
+            break
+
+        if (t > max_iter):
+            print(f"\nReached max number of iterations: {max_iter}. Stopping\n")
+            break
 
         # 3. calculate the step size
         if step_size_mode == 'decaying':
@@ -101,7 +122,7 @@ def projected_gd(X, y, step_size_mode : str, r, eps, max_iter, m, a_compare, eta
         a_est = projected_update_a
 
         # 5. re-calculate the gradient
-        cur_grad = calc_grad(X, y, a_est, m)
+        cur_grad = calc_grad(X, y, a_est, m, batch_size)
 
         if step_size_mode == 'AdaGrad':
             cur_grad_expand = np.transpose(np.expand_dims(cur_grad, axis=1))
@@ -112,14 +133,16 @@ def projected_gd(X, y, step_size_mode : str, r, eps, max_iter, m, a_compare, eta
         error = np.sum(np.abs(a_compare - a_est))
         err_vec = np.append(err_vec, error)
 
-        if t%100 == 0:
+        time_vec = np.append(time_vec, time.time())
+
+        if t%print_every == 0:
             print(f"Iter: {t}, error : {error}, grad_norm : {np.linalg.norm(cur_grad)**2}")
 
 
         t += 1
 
 
-    return err_vec, a_est
+    return time_vec, err_vec, a_est
 
 def main():
 
@@ -160,6 +183,10 @@ def main():
     plt.savefig("graphs/q_3.png")
     plt.close(fig)
 
+    do_56 = False
+    do_78 = False
+    do_10 = True
+    do_11 = True
 
     # question 5 + 6
 
@@ -168,9 +195,17 @@ def main():
     eps = 1e-10         # stop condition
     max_iter = 2000    # max steps
 
-    if True:
-        decay_err_vec, decay_a_est = projected_gd(X_matrix, y_meas, 'decaying', r, eps, max_iter, m, a_est)
-        adagrad_err_vec, adagrad_a_est = projected_gd(X_matrix, y_meas, 'AdaGrad', r, eps, max_iter, m, a_est)
+    # 1. pick random initial values s.t. they are in C:
+    in_C = False
+
+    while in_C == False:
+        a_init = np.random.randn(4)
+        in_C = np.linalg.norm(a_init) <= r
+
+
+    if do_56:
+        _, decay_err_vec, decay_a_est = projected_gd(X_matrix, y_meas, 'decaying', r, eps, max_iter, m, a_init, a_est)
+        _, adagrad_err_vec, adagrad_a_est = projected_gd(X_matrix, y_meas, 'AdaGrad', r, eps, max_iter, m, a_init, a_est)
 
 
         # plot error
@@ -192,42 +227,103 @@ def main():
     L = np.max(np.linalg.eig(mx)[0])
     max_iter = 500    # max steps
 
+    if do_78:
 
-    const_step_1_err_vec, const_step_a_est_1 = projected_gd(X_matrix, y_meas, 'Const', r, eps, max_iter, m, a_est , eta=10/L)
-    const_step_2_err_vec, const_step_a_est_2 = projected_gd(X_matrix, y_meas, 'Const', r, eps, max_iter, m, a_est , eta=1/L)
-    const_step_3_err_vec, const_step_a_est_3 = projected_gd(X_matrix, y_meas, 'Const', r, eps, max_iter, m, a_est , eta=1/(10*L))
+        _, const_step_1_err_vec, const_step_a_est_1 = projected_gd(X_matrix, y_meas, 'Const', r, eps, max_iter, m, a_init, a_est , eta=10/L)
+        _, const_step_2_err_vec, const_step_a_est_2 = projected_gd(X_matrix, y_meas, 'Const', r, eps, max_iter, m, a_init, a_est , eta=1/L)
+        _, const_step_3_err_vec, const_step_a_est_3 = projected_gd(X_matrix, y_meas, 'Const', r, eps, max_iter, m, a_init, a_est , eta=1/(10*L))
 
-    # plot error
-    fig, ax = plt.subplots()
-    ax.set_yscale('log')
-    ax.plot(const_step_1_err_vec, color='r')
-    ax.plot(const_step_2_err_vec, color='b')
-    ax.plot(const_step_3_err_vec, color='g')
-    ax.grid()
-    ax.set_ylabel("Error [log]")
-    ax.set_xlabel("Iterations")
-    ax.legend(["10/L", "1/L", "1/10L"], bbox_to_anchor=(0.55, 0.3))
-    ax.set_title('Convergence rate comparison')
-    plt.savefig("graphs/q_8.png")
-    plt.close(fig)
-
-
-    # plot error
-    fig, ax = plt.subplots()
-    ax.set_yscale('log')
-    ax.plot(adagrad_err_vec, color='r')
-    ax.plot(const_step_2_err_vec, color='b')
-    ax.grid()
-    ax.set_ylabel("Error [log]")
-    ax.set_xlabel("Iterations")
-    ax.legend(["Adagrad", "Const: eta=1/L"], bbox_to_anchor=(0.55, 0.3))
-    ax.set_title('Convergence rate comparison')
-    plt.savefig("graphs/q_9.png")
-    plt.close(fig)
+        # plot error
+        fig, ax = plt.subplots()
+        ax.set_yscale('log')
+        ax.plot(const_step_1_err_vec, color='r')
+        ax.plot(const_step_2_err_vec, color='b')
+        ax.plot(const_step_3_err_vec, color='g')
+        ax.grid()
+        ax.set_ylabel("Error [log]")
+        ax.set_xlabel("Iterations")
+        ax.legend(["10/L", "1/L", "1/10L"], bbox_to_anchor=(0.55, 0.3))
+        ax.set_title('Convergence rate comparison')
+        plt.savefig("graphs/q_8.png")
+        plt.close(fig)
 
 
+        # plot error
+        fig, ax = plt.subplots()
+        ax.set_yscale('log')
+        ax.plot(adagrad_err_vec, color='r')
+        ax.plot(const_step_2_err_vec, color='b')
+        ax.grid()
+        ax.set_ylabel("Error [log]")
+        ax.set_xlabel("Iterations")
+        ax.legend(["Adagrad", "Const: eta=1/L"], bbox_to_anchor=(0.55, 0.3))
+        ax.set_title('Convergence rate comparison')
+        plt.savefig("graphs/q_9.png")
+        plt.close(fig)
+
+
+    # Quesitons 10 - 11
+
+    batch_size_vec = [1, 10, 100, 1000]
+    decay_err_vec_batch = {}
+    decay_a_est_batch = {}
+
+    eps = 1e-20         # stop condition
+    max_iter = 1000    # max steps
+
+    if do_10:
+        for i, batch_size in enumerate(batch_size_vec):
+            print(f"\nInit for batch_size = {batch_size}")
+            _, decay_err_vec_batch[i], decay_a_est_batch[i] = projected_gd(X_matrix, y_meas, 'decaying', r, eps, max_iter, m, a_init, a_est, batch_size=batch_size, print_every=100)
+
+
+        # plot error
+        fig, ax = plt.subplots()
+        ax.set_yscale('log')
+        ax.plot(decay_err_vec_batch[0], color='r')
+        ax.plot(decay_err_vec_batch[1], color='b')
+        ax.plot(decay_err_vec_batch[2], color='g')
+        ax.plot(decay_err_vec_batch[3], color='k')
+        ax.grid()
+        ax.set_ylabel("Error [log]")
+        ax.set_xlabel("Iterations")
+        ax.legend(["batch_size = 1", "batch_size = 10", "batch_size = 100", "batch_size = 1000"], bbox_to_anchor=(0.55, 0.3))
+        ax.set_title('Convergence rate comparison')
+        plt.savefig("graphs/q_10.png")
+
+    decay_time_vec_batch = {}
+    
+    if do_11:
+
+        max_iter = 10000  # max steps
+
+
+        for i, batch_size in enumerate(batch_size_vec):
+            print(f"\nInit for batch_size = {batch_size}")
+            decay_time_vec_batch[i], decay_err_vec_batch[i], decay_a_est_batch[i] = projected_gd(X_matrix, y_meas, 'decaying', r, eps, max_iter, m, a_init, a_est, batch_size=batch_size, print_every=100)
+
+
+        # plot error
+        fig, ax = plt.subplots()
+        ax.set_yscale('log')
+        ax.plot(decay_time_vec_batch[0] - decay_time_vec_batch[0][0], decay_err_vec_batch[0], color='r')
+        ax.plot(decay_time_vec_batch[1] - decay_time_vec_batch[1][0], decay_err_vec_batch[1], color='b')
+        ax.plot(decay_time_vec_batch[2] - decay_time_vec_batch[2][0], decay_err_vec_batch[2], color='g')
+        ax.plot(decay_time_vec_batch[3] - decay_time_vec_batch[3][0], decay_err_vec_batch[3], color='k')
+        ax.grid()
+        ax.set_ylabel("Error [log]")
+        ax.set_xlabel("Time [s]")
+        ax.legend(["batch_size = 1", "batch_size = 10", "batch_size = 100", "batch_size = 1000"], bbox_to_anchor=(0.55, 0.3))
+        ax.set_title('Convergence rate comparison')
+        plt.savefig("graphs/q_11.png")
+
+
+
+    
 
     print("done")
+
+
 
 
 
