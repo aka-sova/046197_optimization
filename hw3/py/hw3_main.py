@@ -43,7 +43,7 @@ def projected_gd(X, y, step_size_mode : str, r, eps, max_iter, m, a_init, a_comp
             X_batch_T = np.transpose(X_batch)       # (n x batch_size)
             # y (batch_size, 1)
 
-            g_T = (1/m) * np.matmul(X_batch_T, X_a-y_batch[:,0])
+            g_T = (1/batch_size) * np.matmul(X_batch_T, X_a-y_batch[:,0])
 
         return g_T
 
@@ -183,8 +183,8 @@ def main():
     plt.savefig("graphs/q_3.png")
     plt.close(fig)
 
-    do_56 = False
-    do_78 = False
+    do_56 = True
+    do_78 = True
     do_10 = True
     do_11 = True
 
